@@ -28,7 +28,7 @@ gulp.task('scss', function() {
             browsers: ['last 15 versions'],
             cascade: true
         }))
-        .pipe(gulp.dest('../acordion/'))
+        .pipe(gulp.dest('.'))
         .pipe(browserSync.stream());
 });
 
@@ -108,7 +108,7 @@ gulp.task('build:del', function() {
 // WATCH
 gulp.task('watch', ['scss'], function() {
     browserSync.init({
-        server: "../acordion/"
+        server: "./"
     });
     gulp.watch('./*.scss', ['scss']);
     gulp.watch("./*.html").on('change', browserSync.reload);
