@@ -1,6 +1,7 @@
 let btnMakeDiv = document.getElementById('makeDiv');
+btnMakeDiv.addEventListener('click', makeDiv);
 
-btnMakeDiv.addEventListener('click', function makeDiv(e) {
+function makeDiv(e) {
     let newDiv = document.createElement('div');
     newDiv.classList.add('newDiv');
     newDiv.style.backgroundColor = getRandomColor();
@@ -9,10 +10,7 @@ btnMakeDiv.addEventListener('click', function makeDiv(e) {
     newDiv.style.top = getRandomInt(document.documentElement.clientHeight, 5) + 'px';
     newDiv.style.left = getRandomInt(document.documentElement.clientWidth, 5) + 'px';
     document.body.appendChild(newDiv);
-});
-
-
-
+}
 
 function getRandomInt(max, min) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -26,13 +24,41 @@ function getRandomColor() {
     return color;
 }
 
-// TODO: разобраться с opacity
-// let timer = setInterval(() => {
-//     newDiv.style.opacity += 1;
-// }, 10);
-//
-// if (newDiv.style.opacity > 1) {
-//     clearInterval(timer);
-//     newDiv.style.opacity = 1;
-// }
-// });
+(function drag() {
+    let activeEl;
+    let zIndex = 0;
+
+    function dragMouseDown(e) {
+        if (e.target.classList.contains('newDiv')) {
+            zIndex++;
+            activeEl = e.target;
+            activeEl = e.target;
+            activeEl.style.transition = '0.3s';
+            activeEl.style.zIndex = '' + zIndex;
+            activeEl.style.cursor = '-webkit-grabbing';
+            activeEl.style.top = (e.clientY - activeEl.offsetHeight / 2) + 'px';
+            activeEl.style.left = (e.clientX - activeEl.offsetWidth / 2) + 'px';
+        }
+    }
+
+    function dragMouseUp(e) {
+        if (activeEl) {
+            activeEl.style.cursor = '-webkit-grab';
+            activeEl = undefined;
+        }
+    }
+
+    function dragMouseMove(e) {
+        if (activeEl) {
+            activeEl.style.transition = '0s';
+
+            activeEl.style.top = (e.clientY - activeEl.offsetHeight / 2) + 'px';
+            activeEl.style.left = (e.clientX - activeEl.offsetWidth / 2) + 'px';
+
+        }
+    }
+
+    document.body.addEventListener('mousedown', dragMouseDown);
+    document.body.addEventListener('mouseup', dragMouseUp);
+    document.body.addEventListener('mousemove', dragMouseMove);
+})();
